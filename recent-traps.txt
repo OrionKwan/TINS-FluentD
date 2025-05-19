@@ -1,0 +1,137 @@
+SNMPTRAP: 2025-05-13 06:24:15 Trap listener initialized with custom MIB support
+SNMPTRAP: 2025-05-13 06:25:05 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 UDP: [172.18.0.1]:34992->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>UDP: [172.18.0.1]:34992->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:39:07.97
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:39:07.97</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate Wrong Type (should be INTEGER): "Test trap"
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate Wrong Type (should be INTEGER): "Test trap"</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 UDP: [172.18.0.1]:34992->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>UDP: [172.18.0.1]:34992->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:39:07.97
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:39:07.97</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification</data></trap>
+SNMPTRAP: 2025-05-13 06:25:05 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate Wrong Type (should be INTEGER): "Test trap"
+FORMATTED: <trap><timestamp>2025-05-13 06:25:05</timestamp><data>NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate Wrong Type (should be INTEGER): "Test trap"</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 UDP: [172.18.0.1]:47008->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>UDP: [172.18.0.1]:47008->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:40:06.10
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:40:06.10</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate 123
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate 123</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 UDP: [172.18.0.1]:47008->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>UDP: [172.18.0.1]:47008->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:40:06.10
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:40:06.10</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatNotification</data></trap>
+SNMPTRAP: 2025-05-13 06:26:03 NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate 123
+FORMATTED: <trap><timestamp>2025-05-13 06:26:03</timestamp><data>NET-SNMP-EXAMPLES-MIB::netSnmpExampleHeartbeatRate 123</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 UDP: [172.18.0.1]:55095->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>UDP: [172.18.0.1]:55095->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:03.13
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:03.13</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkDown.0
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkDown.0</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifIndex.1 1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifIndex.1 1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifDescr.1 GigabitEthernet0/1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifDescr.1 GigabitEthernet0/1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifAdminStatus.1 up
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifAdminStatus.1 up</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifOperStatus.1 down
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifOperStatus.1 down</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 UDP: [172.18.0.1]:55095->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>UDP: [172.18.0.1]:55095->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:03.13
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:03.13</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkDown.0
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkDown.0</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifIndex.1 1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifIndex.1 1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifDescr.1 GigabitEthernet0/1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifDescr.1 GigabitEthernet0/1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifAdminStatus.1 up
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifAdminStatus.1 up</data></trap>
+SNMPTRAP: 2025-05-13 06:27:00 IF-MIB::ifOperStatus.1 down
+FORMATTED: <trap><timestamp>2025-05-13 06:27:00</timestamp><data>IF-MIB::ifOperStatus.1 down</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 UDP: [172.18.0.1]:52440->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>UDP: [172.18.0.1]:52440->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:29.63
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:29.63</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkUp.0
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkUp.0</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifIndex.1 1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifIndex.1 1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifDescr.1 GigabitEthernet0/1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifDescr.1 GigabitEthernet0/1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifAdminStatus.1 up
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifAdminStatus.1 up</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifOperStatus.1 up
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifOperStatus.1 up</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 UDP: [172.18.0.1]:52440->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>UDP: [172.18.0.1]:52440->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:29.63
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:29.63</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkUp.0
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 IF-MIB::linkUp.0</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifIndex.1 1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifIndex.1 1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifDescr.1 GigabitEthernet0/1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifDescr.1 GigabitEthernet0/1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifAdminStatus.1 up
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifAdminStatus.1 up</data></trap>
+SNMPTRAP: 2025-05-13 06:27:27 IF-MIB::ifOperStatus.1 up
+FORMATTED: <trap><timestamp>2025-05-13 06:27:27</timestamp><data>IF-MIB::ifOperStatus.1 up</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 UDP: [172.18.0.1]:45031->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>UDP: [172.18.0.1]:45031->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:42.54
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:42.54</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-MIB::snmpTrapOID.0 SNMPv2-SMI::enterprises.9.9.91.2.0.1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 SNMPv2-SMI::enterprises.9.9.91.2.0.1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.2.5 75
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.2.5 75</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.3.5 80
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.3.5 80</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.4.5 95
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.4.5 95</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.5.5 "CPU Temperature Critical"
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.5.5 "CPU Temperature Critical"</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 Zabbix-Server.local
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>Zabbix-Server.local</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 UDP: [172.18.0.1]:45031->[172.18.0.8]:1162
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>UDP: [172.18.0.1]:45031->[172.18.0.8]:1162</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:42.54
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>DISMAN-EVENT-MIB::sysUpTimeInstance 70:21:41:42.54</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-MIB::snmpTrapOID.0 SNMPv2-SMI::enterprises.9.9.91.2.0.1
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-MIB::snmpTrapOID.0 SNMPv2-SMI::enterprises.9.9.91.2.0.1</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.2.5 75
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.2.5 75</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.3.5 80
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.3.5 80</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.4.5 95
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.4.5 95</data></trap>
+SNMPTRAP: 2025-05-13 06:27:40 SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.5.5 "CPU Temperature Critical"
+FORMATTED: <trap><timestamp>2025-05-13 06:27:40</timestamp><data>SNMPv2-SMI::enterprises.9.9.91.1.1.1.1.5.5 "CPU Temperature Critical"</data></trap>

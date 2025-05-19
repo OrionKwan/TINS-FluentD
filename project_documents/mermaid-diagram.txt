@@ -1,0 +1,18 @@
+graph TD
+    A[External SNMP Traps] --> |UDP Port 1162| B[SNMPTRAPD]
+    B1[SNMPv3 User: NCEadmin] --> |SHA Auth, AES Priv| B
+    B2[SNMPv2c Community: public] --> B
+    B --> |Writes formatted traps| C[/var/log/snmptrapd.log]
+    C --> |tail plugin| D[Fluentd Source]
+    D --> |regexp parser| E[Extract trap data]
+    E --> |record_transformer| F[Enhance with metadata]
+    F --> |copy plugin| G[Multiple Output Routing]
+    G --> |debug output| H[Stdout JSON Format]
+    G --> |remote_syslog plugin| I[Syslog Formatted Output]
+    I --> |UDP Protocol| J[Forward to UDP_FORWARD_HOST:PORT]
+    J --> |XML formatted traps| K[External Monitoring Systems]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#bfb,stroke:#333,stroke-width:2px
+    style K fill:#fbb,stroke:#333,stroke-width:2px 

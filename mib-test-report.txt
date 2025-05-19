@@ -1,0 +1,24 @@
+=== Testing Huawei MIB Files ===
+Created test container: 9e88ad323966ba5525a7290e67232bc76f5e394d16800a3473302c3a18985774
+Installing SNMP tools...
+Testing MIB file parsing...
+total 116
+drwxr-xr-x 2 1000 1000  4096 May 12 01:26 .
+drwxr-xr-x 1 root root  4096 May 12 01:55 ..
+-rw-rw-r-- 1 1000 1000 44555 May 12  2025 HW-IMAPV1NORTHBOUND-TRAP-MIB.mib
+-rw-r--r-- 1 1000 1000 46876 May 12  2025 IMAP_NORTHBOUND_MIB-V1.mib
+-rw-rw-r-- 1 1000 1000 13835 May 12  2025 T2000-NETMANAGEMENT-MIB.mib
+
+Testing HW-IMAPV1NORTHBOUND-TRAP-MIB.mib...
+sh: 1: snmptranslate: not found
+
+Testing IMAP_NORTHBOUND_MIB-V1.mib...
+sh: 1: snmptranslate: not found
+
+Testing OID resolution by numeric value...
+sh: 1: snmptranslate: not found
+sh: 1: snmptranslate: not found
+
+Attempting to create a SNMP trap with the MIB...
+sh: 1: snmptrap: not found
+Failed to create trap

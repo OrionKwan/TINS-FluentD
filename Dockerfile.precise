@@ -1,0 +1,99 @@
+FROM fluent/fluentd:v1.16-1
+
+# Switch to root user to install packages
+USER root
+
+# Install system dependencies for SNMPv3 including net-snmp tools
+RUN apk add --no-cache \
+    net-snmp \
+    net-snmp-dev \
+    net-snmp-tools \
+    perl \
+    lsof \
+    tcpdump \
+    build-base \
+    ruby-dev
+
+# Install required gems with specific versions
+RUN gem install snmp && \
+    gem install fluent-plugin-kafka && \
+    gem install fluent-plugin-record-modifier && \
+    gem install fluent-plugin-remote_syslog
+
+# Create directories
+RUN mkdir -p /fluentd/plugins /etc/snmp /fluentd/log /var/log
+
+# Copy plugin and trap configuration
+COPY fluentd-snmp/plugins/in_snmptrapd.rb /fluentd/plugins/
+COPY fluentd-snmp/conf/snmptrapd.conf /etc/snmp/
+
+# Create a clean fluent.conf file without UDP output
+RUN echo '# Read SNMP trap log file' > /fluentd/etc/fluent.conf && \
+    echo '<source>' >> /fluentd/etc/fluent.conf && \
+    echo '  @type tail' >> /fluentd/etc/fluent.conf && \
+    echo '  path /var/log/snmptrapd.log' >> /fluentd/etc/fluent.conf && \
+    echo '  tag snmp.trap' >> /fluentd/etc/fluent.conf && \
+    echo '  pos_file /tmp/snmptrapd.pos' >> /fluentd/etc/fluent.conf && \
+    echo '  read_from_head true' >> /fluentd/etc/fluent.conf && \
+    echo '  ' >> /fluentd/etc/fluent.conf && \
+    echo '  <parse>' >> /fluentd/etc/fluent.conf && \
+    echo '    @type regexp' >> /fluentd/etc/fluent.conf && \
+    echo '    expression /^(SNMPTRAP: |FORMATTED: )(?<message>.*)/' >> /fluentd/etc/fluent.conf && \
+    echo '  </parse>' >> /fluentd/etc/fluent.conf && \
+    echo '</source>' >> /fluentd/etc/fluent.conf && \
+    echo '' >> /fluentd/etc/fluent.conf && \
+    echo '# Output configuration' >> /fluentd/etc/fluent.conf && \
+    echo '<match snmp.trap>' >> /fluentd/etc/fluent.conf && \
+    echo '  @type copy' >> /fluentd/etc/fluent.conf && \
+    echo '  ' >> /fluentd/etc/fluent.conf && \
+    echo '  # Output to Kafka' >> /fluentd/etc/fluent.conf && \
+    echo '  <store>' >> /fluentd/etc/fluent.conf && \
+    echo '    @type kafka2' >> /fluentd/etc/fluent.conf && \
+    echo '    brokers "#{ENV[\"KAFKA_BROKER\"] || \"kafka:9092\"}"' >> /fluentd/etc/fluent.conf && \
+    echo '    topic "#{ENV[\"KAFKA_TOPIC\"] || \"snmp_traps\"}"' >> /fluentd/etc/fluent.conf && \
+    echo '    ' >> /fluentd/etc/fluent.conf && \
+    echo '    <format>' >> /fluentd/etc/fluent.conf && \
+    echo '      @type json' >> /fluentd/etc/fluent.conf && \
+    echo '    </format>' >> /fluentd/etc/fluent.conf && \
+    echo '    ' >> /fluentd/etc/fluent.conf && \
+    echo '    <buffer>' >> /fluentd/etc/fluent.conf && \
+    echo '      @type memory' >> /fluentd/etc/fluent.conf && \
+    echo '      flush_interval 1s' >> /fluentd/etc/fluent.conf && \
+    echo '    </buffer>' >> /fluentd/etc/fluent.conf && \
+    echo '  </store>' >> /fluentd/etc/fluent.conf && \
+    echo '  ' >> /fluentd/etc/fluent.conf && \
+    echo '  # Debug output' >> /fluentd/etc/fluent.conf && \
+    echo '  <store>' >> /fluentd/etc/fluent.conf && \
+    echo '    @type stdout' >> /fluentd/etc/fluent.conf && \
+    echo '  </store>' >> /fluentd/etc/fluent.conf && \
+    echo '</match>' >> /fluentd/etc/fluent.conf && \
+    echo '' >> /fluentd/etc/fluent.conf && \
+    echo '# Set log level' >> /fluentd/etc/fluent.conf && \
+    echo '<system>' >> /fluentd/etc/fluent.conf && \
+    echo '  log_level info' >> /fluentd/etc/fluent.conf && \
+    echo '</system>' >> /fluentd/etc/fluent.conf
+
+# Create snmptrapd log file
+RUN touch /var/log/snmptrapd.log && chmod 666 /var/log/snmptrapd.log
+
+# Create entrypoint script
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'snmptrapd -c /etc/snmp/snmptrapd.conf -Lf /var/log/snmptrapd.log -f &' >> /entrypoint.sh && \
+    echo 'exec "$@"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Set permissions
+RUN chmod -R 755 /fluentd && \
+    chmod +x /fluentd/plugins/*.rb
+
+# Expose SNMP trap port
+EXPOSE 1162/udp
+
+# Run as root to allow binding to port 1162
+USER root
+
+# Use our custom entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Command
+CMD ["fluentd", "-p", "/fluentd/plugins", "-c", "/fluentd/etc/fluent.conf"] 

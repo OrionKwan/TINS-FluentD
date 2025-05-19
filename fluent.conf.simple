@@ -1,0 +1,33 @@
+# Read SNMP trap log
+<source>
+  @type tail
+  path /var/log/snmptrapd.log
+  tag snmp.trap
+  pos_file /tmp/snmptrapd.pos
+  read_from_head true
+  
+  <parse>
+    @type none
+  </parse>
+</source>
+
+# Output configuration
+<match snmp.trap>
+  @type copy
+  
+  # Output to Kafka
+  <store>
+    @type kafka2
+    brokers kafka:9092
+    topic snmp_traps
+    
+    <format>
+      @type json
+    </format>
+  </store>
+  
+  # Debug output
+  <store>
+    @type stdout
+  </store>
+</match> 

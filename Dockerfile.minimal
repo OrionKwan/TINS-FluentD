@@ -1,0 +1,74 @@
+FROM fluent/fluentd:v1.16-1
+
+# Switch to root user to install packages
+USER root
+
+# Install system dependencies for SNMPv3
+RUN apk add --no-cache \
+    net-snmp \
+    net-snmp-dev \
+    net-snmp-tools \
+    perl \
+    build-base \
+    ruby-dev
+
+# Install required gems
+RUN gem install fluent-plugin-kafka
+
+# Create directories
+RUN mkdir -p /var/log /fluentd/etc
+
+# Create fluent.conf file
+RUN echo '# Read SNMP trap log' > /fluentd/etc/fluent.conf && \
+    echo '<source>' >> /fluentd/etc/fluent.conf && \
+    echo '  @type tail' >> /fluentd/etc/fluent.conf && \
+    echo '  path /var/log/snmptrapd.log' >> /fluentd/etc/fluent.conf && \
+    echo '  tag snmp.trap' >> /fluentd/etc/fluent.conf && \
+    echo '  pos_file /tmp/snmptrapd.pos' >> /fluentd/etc/fluent.conf && \
+    echo '  read_from_head true' >> /fluentd/etc/fluent.conf && \
+    echo '  <parse>' >> /fluentd/etc/fluent.conf && \
+    echo '    @type none' >> /fluentd/etc/fluent.conf && \
+    echo '  </parse>' >> /fluentd/etc/fluent.conf && \
+    echo '</source>' >> /fluentd/etc/fluent.conf && \
+    echo '' >> /fluentd/etc/fluent.conf && \
+    echo '<match snmp.trap>' >> /fluentd/etc/fluent.conf && \
+    echo '  @type copy' >> /fluentd/etc/fluent.conf && \
+    echo '  <store>' >> /fluentd/etc/fluent.conf && \
+    echo '    @type kafka2' >> /fluentd/etc/fluent.conf && \
+    echo '    brokers "#{ENV[\"KAFKA_BROKER\"] || \"kafka:9092\"}"' >> /fluentd/etc/fluent.conf && \
+    echo '    topic "#{ENV[\"KAFKA_TOPIC\"] || \"snmp_traps\"}"' >> /fluentd/etc/fluent.conf && \
+    echo '    <format>' >> /fluentd/etc/fluent.conf && \
+    echo '      @type json' >> /fluentd/etc/fluent.conf && \
+    echo '    </format>' >> /fluentd/etc/fluent.conf && \
+    echo '  </store>' >> /fluentd/etc/fluent.conf && \
+    echo '  <store>' >> /fluentd/etc/fluent.conf && \
+    echo '    @type stdout' >> /fluentd/etc/fluent.conf && \
+    echo '  </store>' >> /fluentd/etc/fluent.conf && \
+    echo '</match>' >> /fluentd/etc/fluent.conf
+
+# Create snmptrapd.conf file
+RUN echo 'createUser -e 0x80001F88807C0F9A615F4B0768000000 NCEadmin MD5 P@ssw0rdauth AES P@ssw0rddata' > /etc/snmp/snmptrapd.conf && \
+    echo 'authUser log,execute,net NCEadmin authPriv' >> /etc/snmp/snmptrapd.conf && \
+    echo 'authCommunity log,execute,net public' >> /etc/snmp/snmptrapd.conf && \
+    echo 'disableAuthorization yes' >> /etc/snmp/snmptrapd.conf
+
+# Create snmptrapd log file
+RUN touch /var/log/snmptrapd.log && chmod 666 /var/log/snmptrapd.log
+
+# Create entrypoint script
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'snmptrapd -Lf /var/log/snmptrapd.log -f &' >> /entrypoint.sh && \
+    echo 'exec "$@"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Expose SNMP trap port
+EXPOSE 1162/udp
+
+# Run as root to allow binding to port 1162
+USER root
+
+# Use our custom entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Command
+CMD ["fluentd", "-c", "/fluentd/etc/fluent.conf"] 

@@ -1,0 +1,44 @@
+FROM fluent/fluentd:v1.16-1
+
+# Switch to root user to install packages
+USER root
+
+# Install system dependencies for SNMPv3
+RUN apk add --no-cache \
+    net-snmp \
+    net-snmp-dev \
+    net-snmp-tools \
+    perl \
+    build-base \
+    ruby-dev
+
+# Install required gems
+RUN gem install fluent-plugin-kafka
+
+# Create directories
+RUN mkdir -p /var/log /fluentd/etc /etc/snmp
+
+# Copy configuration files
+COPY fluent.conf.simple /fluentd/etc/fluent.conf
+COPY snmptrapd.conf.simple /etc/snmp/snmptrapd.conf
+
+# Create snmptrapd log file
+RUN touch /var/log/snmptrapd.log && chmod 666 /var/log/snmptrapd.log
+
+# Create entrypoint script
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'snmptrapd -Lf /var/log/snmptrapd.log -f &' >> /entrypoint.sh && \
+    echo 'exec "$@"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Expose SNMP trap port
+EXPOSE 1162/udp
+
+# Run as root to allow binding to port 1162
+USER root
+
+# Use our custom entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Command
+CMD ["fluentd", "-c", "/fluentd/etc/fluent.conf"] 

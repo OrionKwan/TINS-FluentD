@@ -1,0 +1,52 @@
+graph TD
+    %% SNMP Sources
+    A[External SNMP Traps] --> |UDP Port 1162| B[SNMPTRAPD]
+    
+    %% Authentication methods
+    B1[SNMPv3 User: NCEadmin] --> |SHA Authentication| B11[AES Encryption] --> B
+    B2[SNMPv2c Community: public] --> B
+    
+    %% SNMPTRAPD Processing
+    B --> |Format with timestamps| C[/var/log/snmptrapd.log]
+    
+    %% Log File Formats
+    C1[TRAP Format: timestamp agent->host: OID: values] --> C
+    C2[FORMATTED: XML structure with timestamp and data] --> C
+    
+    %% Fluentd Processing
+    C --> |tail source plugin| D[Read log entries]
+    D --> |regexp parser| E[Extract raw_data field]
+    E --> |parser filter| F[Parse trap format]
+    F --> |regexp filter| G[Extract XML data]
+    G --> |grep filter| H[Filter initialization messages]
+    
+    %% Data Enhancement
+    H --> |record_transformer| I[Add fields: device, trap_type]
+    I --> |ruby code| J[Generate formatted_output XML]
+    
+    %% Output Routing
+    J --> |copy plugin| K[Route to multiple outputs]
+    
+    %% Output Destinations
+    K --> |stdout output| L[Console JSON output]
+    K --> |remote_syslog| M[Remote Syslog plugin]
+    
+    %% Syslog Configuration
+    M --> |configured with| M1[Host: UDP_FORWARD_HOST]
+    M --> |configured with| M2[Port: UDP_FORWARD_PORT]
+    M --> |configured with| M3[Protocol: UDP]
+    
+    %% Final Output
+    M --> |single_value format| N[Forward formatted XML]
+    N --> |UDP transmission| O[External Monitoring Systems]
+    
+    %% Styling
+    classDef source fill:#f9f,stroke:#333,stroke-width:2px
+    classDef process fill:#bbf,stroke:#333,stroke-width:2px
+    classDef output fill:#bfb,stroke:#333,stroke-width:2px
+    classDef destination fill:#fbb,stroke:#333,stroke-width:2px
+    
+    class A,B1,B2 source
+    class B,C,D,E,F,G,H,I,J,K process
+    class L,M,N output
+    class O destination 

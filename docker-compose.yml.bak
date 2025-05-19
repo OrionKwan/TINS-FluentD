@@ -1,0 +1,196 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - opensearch-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://${KAFKA_ADVERTISED_HOST}:9096
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+    ports:
+      - "9092:9092"
+      - "9096:9093"
+    networks:
+      - opensearch-net
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:7.3.0
+    container_name: kafka-connect
+    depends_on:
+      - kafka
+      - opensearch-node1
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: "connect-cluster"
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.storage.StringConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
+      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "${KAFKA_CONNECT_HOST}"
+      CONNECT_REST_ADVERTISED_PORT: "8083"
+      CONNECT_PLUGIN_PATH: "/opt/kafka/plugins"
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./kafka-connector/plugins:/opt/kafka/plugins:ro
+    networks:
+      - opensearch-net
+
+  fluentd:
+    build: ./fluentd
+    ports:
+      - "24224:24224"         # Forward (MessagePack) port
+      - "24224:24224/udp"
+      - "9880:9880"           # HTTP input port
+      - "5140:5140"           # Syslog input port
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+      - ./fluentd/scripts/wait-for-kafka.sh:/fluentd/wait-for-kafka.sh:ro
+    command: ["sh", "-c", "/fluentd/wait-for-kafka.sh kafka 9092 && fluentd -c /fluentd/etc/fluent.conf"]
+    networks:
+      - opensearch-net
+
+  opensearch-node1:
+    image: opensearchproject/opensearch:2.18.0
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1
+      - discovery.seed_hosts=opensearch-node1,opensearch-node2
+      - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    networks:
+      - opensearch-net
+    healthcheck:
+      test: ["CMD", "curl", "-k", "-f", "-u", "admin:${OPENSEARCH_INITIAL_ADMIN_PASSWORD}", "https://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  opensearch-node2:
+    image: opensearchproject/opensearch:2.18.0
+    container_name: opensearch-node2
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node2
+      - discovery.seed_hosts=opensearch-node1,opensearch-node2
+      - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data2:/usr/share/opensearch/data
+    networks:
+      - opensearch-net
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.18.0
+    container_name: opensearch-dashboards
+    environment:
+      OPENSEARCH_HOSTS: >
+        ["https://opensearch-node1:9200","https://opensearch-node2:9200"]
+      OPENSEARCH_USERNAME: admin
+      OPENSEARCH_PASSWORD: ${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      OPENSEARCH_SSL_VERIFICATIONMODE: none
+    ports:
+      - "5601:5601"
+    depends_on:
+      - opensearch-node1
+      - opensearch-node2
+    networks:
+      - opensearch-net
+
+  ml-pipeline:
+    build: ./ml-pipeline
+    depends_on:
+      - kafka
+      - opensearch-node1
+    environment:
+      KAFKA_BROKER: kafka:9092
+      OPENSEARCH_HOST: opensearch-node1
+    networks:
+      - opensearch-net
+
+  fluentd-snmp:
+    build: ./fluentd-snmp
+    container_name: fluentd-snmp-trap
+    ports:
+      - "1162:1162/udp"
+    volumes:
+      - ./fluentd-snmp/conf/new-fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluentd-snmp/plugins:/fluentd/plugins
+      - ./fluentd-snmp/mibs:/fluentd/mibs:ro
+    environment:
+      - SNMPV3_USER=NCEadmin
+      - SNMPV3_AUTH_PASS=P@ssw0rdauth
+      - SNMPV3_PRIV_PASS=P@ssw0rddata
+      - SNMPV3_AUTH_PROTOCOL=SHA
+      - SNMPV3_PRIV_PROTOCOL=AES
+      - SNMPV3_ENGINE_ID=0x80001F88807C0F9A615F4B0768000000
+      - KAFKA_BROKER=kafka:9092
+      - KAFKA_TOPIC=snmp_traps
+      - UDP_FORWARD_HOST=165.202.6.129  # Target host IP
+      - UDP_FORWARD_PORT=1237          # Updated UDP port to forward to
+    healthcheck:
+      test: ["CMD", "ps", "aux", "|", "grep", "[s]nmptrapd"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    depends_on:
+      - kafka
+    networks:
+      - opensearch-net
+
+volumes:
+  opensearch-data1:
+  opensearch-data2:
+
+networks:
+  opensearch-net:
+    driver: bridge

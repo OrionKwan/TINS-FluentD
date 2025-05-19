@@ -1,0 +1,56 @@
+FROM fluent/fluentd:v1.16-1
+
+# Switch to root user to install packages
+USER root
+
+# Install system dependencies for SNMPv3 including net-snmp tools
+RUN apk add --no-cache \
+    net-snmp \
+    net-snmp-dev \
+    net-snmp-tools \
+    perl \
+    lsof \
+    tcpdump \
+    build-base \
+    ruby-dev
+
+# Install required gems with specific versions
+RUN gem install snmp && \
+    gem install fluent-plugin-kafka && \
+    gem install fluent-plugin-record-modifier && \
+    gem install fluent-plugin-remote_syslog
+
+# Create directories
+RUN mkdir -p /fluentd/plugins /etc/snmp /fluentd/log /var/log /fluentd/etc
+
+# Copy plugin
+COPY fluentd-snmp/plugins/in_snmptrapd.rb /fluentd/plugins/
+
+# Copy fixed configuration files
+COPY fluent.conf.fixed /fluentd/etc/fluent.conf
+COPY snmptrapd.conf.fixed /etc/snmp/snmptrapd.conf
+
+# Create snmptrapd log file
+RUN touch /var/log/snmptrapd.log && chmod 666 /var/log/snmptrapd.log
+
+# Create entrypoint script - explicitly add -Lf flag
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'snmptrapd -c /etc/snmp/snmptrapd.conf -Lf /var/log/snmptrapd.log -f -F "%Y-%m-%d %H:%M:%S %V\n" &' >> /entrypoint.sh && \
+    echo 'exec "$@"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Set permissions
+RUN chmod -R 755 /fluentd && \
+    chmod +x /fluentd/plugins/*.rb
+
+# Expose SNMP trap port
+EXPOSE 1162/udp
+
+# Run as root to allow binding to port 1162
+USER root
+
+# Use our custom entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Command
+CMD ["fluentd", "-p", "/fluentd/plugins", "-c", "/fluentd/etc/fluent.conf"] 

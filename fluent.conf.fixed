@@ -1,0 +1,44 @@
+# Read SNMP trap log file
+<source>
+  @type tail
+  path /var/log/snmptrapd.log
+  tag snmp.trap
+  pos_file /tmp/snmptrapd.pos
+  read_from_head true
+  
+  <parse>
+    @type regexp
+    expression /^(SNMPTRAP: |FORMATTED: )(?<message>.*)/
+  </parse>
+</source>
+
+# Output configuration
+<match snmp.trap>
+  @type copy
+  
+  # Output to Kafka
+  <store>
+    @type kafka2
+    brokers "#{ENV['KAFKA_BROKER'] || 'kafka:9092'}"
+    topic "#{ENV['KAFKA_TOPIC'] || 'snmp_traps'}"
+    
+    <format>
+      @type json
+    </format>
+    
+    <buffer>
+      @type memory
+      flush_interval 1s
+    </buffer>
+  </store>
+  
+  # Debug output
+  <store>
+    @type stdout
+  </store>
+</match>
+
+# Set log level
+<s>
+  log_level info
+</s> 

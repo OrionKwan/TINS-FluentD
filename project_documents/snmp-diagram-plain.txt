@@ -1,0 +1,58 @@
+SNMP Plugin Flow Diagram
+======================
+
+External SNMP Traps (UDP port 1162)
+           |
+           v
++----------------------+
+|      SNMPTRAPD       |<---- SNMPv3 User: NCEadmin (SHA Auth, AES Priv)
++----------------------+<---- SNMPv2c Community: public
+           |
+           | Writes to
+           v
++----------------------+
+| /var/log/snmptrapd.log |
++----------------------+
+           |
+           | Read by tail plugin
+           v
++----------------------+
+|  Fluentd tail source |
++----------------------+
+           |
+           | Parse regex
+           v
++----------------------+
+|  Regexp parser filter |
++----------------------+
+           |
+           | Extract data
+           v
++----------------------+
+| Record transformer   |
+| filter              |
++----------------------+
+           |
+           | Copy plugin
+           v
+       +---+---+
+       |       |
+       v       v
++------------+  +----------------+
+| Stdout for |  | Remote Syslog  |
+| debugging  |  | output         |
++------------+  +----------------+
+                       |
+                       | UDP
+                       v
+               +---------------+
+               | UDP Forward   |
+               | to target host|
+               +---------------+
+                       |
+                       | Forward traps
+                       v
+               +---------------+
+               | External      |
+               | Systems       |
+               +---------------+ 
