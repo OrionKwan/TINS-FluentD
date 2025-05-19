@@ -99,3 +99,20 @@ The script will:
 - Monitor log files for changes
 - Parse log entries to extract engine IDs
 - Uses multiple pattern matching approaches to find engine IDs in various formats
+
+## Running the Pipeline with Docker Compose
+
+1. Set the required environment variables in your shell or an `.env` file:
+   - `KAFKA_ADVERTISED_HOST`
+   - `KAFKA_CONNECT_HOST`
+   - `OPENSEARCH_INITIAL_ADMIN_PASSWORD`
+
+2. Start all services from the repository root:
+   ```bash
+   docker-compose up
+   ```
+
+This command builds and launches Kafka, OpenSearch, Kafka Connect, the Fluentd SNMP collector and the ML pipeline defined in `docker-compose.yml`.
+
+See [test-procedure.md](test-procedure.md) for instructions to verify that the pipeline is operating correctly.
+
